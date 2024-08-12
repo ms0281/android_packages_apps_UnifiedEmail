@@ -27,7 +27,7 @@
     <uses-permission android:name="android.permission.NFC" />
 
     <!-- This needs to be present when we are doing unbundled releases. -->
-    <uses-sdk android:targetSdkVersion="24" android:minSdkVersion="14" />
+    <uses-sdk android:targetSdkVersion="33" android:minSdkVersion="14" />
 
     <application
         android:icon="@mipmap/ic_launcher_mail"
@@ -43,7 +43,8 @@
             android:name=".ui.MailActivity"
             android:launchMode="singleTop"
             android:theme="@style/MailActivityTheme"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:exported="true">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -60,13 +61,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".compose.ComposeActivity"
-            android:theme="@style/ComposeTheme">
+            android:theme="@style/ComposeTheme"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.SENDTO" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="mailto" />
+                <data android:scheme="mailto"
+                android:exported="false" />
             </intent-filter>
 
             <intent-filter>
@@ -98,7 +101,8 @@
 
         <activity android:name=".ui.MailboxSelectionActivity"
             android:theme="@style/InvisibleShortcutWidgetTheme"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -112,7 +116,8 @@
         <activity
                 android:name=".browse.EmlViewerActivity"
                 android:label="@string/app_name"
-                android:theme="@style/UnifiedEmailTheme.Appcompat" >
+                android:theme="@style/UnifiedEmailTheme.Appcompat"
+                android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -158,10 +163,15 @@
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
+	<provider xmlns:tools="http://schemas.android.com/tools"
+        android:name="androidx.startup.InitializationProvider"
+        android:authorities="${applicationId}.androidx-startup"
+        tools:replace="android:authorities" />
+
         <service android:name=".compose.EmptyService"/>
 
         <!-- Widget -->
-        <receiver android:name=".widget.WidgetProvider" android:label="@string/app_name">
+        <receiver android:name=".widget.WidgetProvider" android:label="@string/app_name" android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
